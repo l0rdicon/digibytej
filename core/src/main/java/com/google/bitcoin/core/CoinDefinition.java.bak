@@ -209,32 +209,32 @@ public class CoinDefinition {
 
 
     static public String[] testnetDnsSeeds = new String[] {
-            "testseed1.myriadcoin.org"
+            "testseed1.digibyte.org"
     };
        //from main.h: CAlert::CheckSignature
     public static final String SATOSHI_KEY = "040184710fa689ad5023690c80f3a49c8f13f8d45b8c857fbcbc8bc4a8e4d3eb4b10f4d4604fa08dce601aaf0f470216fe1b51850b4acf21b179c45070ac7b03a9";
     public static final String TESTNET_SATOSHI_KEY = "";
 
     /** The string returned by getId() for the main, production network where people trade things. */
-    public static final String ID_MAINNET = "org.myriadcoin.production";
+    public static final String ID_MAINNET = "org.digibyte.production";
     /** The string returned by getId() for the testnet. */
-    public static final String ID_TESTNET = "org.myriadcoin.test";
+    public static final String ID_TESTNET = "org.digibyte.test";
     /** Unit test network. */
-    public static final String ID_UNITTESTNET = "com.google.myriadcoin.unittest";
+    public static final String ID_UNITTESTNET = "com.google.bitcoin.unittest";
 
     //checkpoints.cpp Checkpoints::mapCheckpoints
-    public static void initCheckpoints(Map<Integer, Sha256Hash> checkpoints)
+    public static final String ID_UNITTESTNET = "com.google.digibyte.unittest";
     {
 
-        checkpoints.put(     0, new Sha256Hash("00000ffde4c020b5938441a0ea3d314bf619eff0b38f32f78f7583cffa1ea485"));
-        checkpoints.put(  9646, new Sha256Hash("0000000000000b0f1372211861f226a3ec06a27d0a5bf36e4244a982da077e8f"));
-        checkpoints.put( 27255, new Sha256Hash("00000000000005112a0debf53703eb3dc4ec2d8d68599c90db71423ea14489b7"));
-        checkpoints.put( 70623, new Sha256Hash("00000000000004767ff6e509d00772af5c4bedaa82c38c1e95c33adbf5ff84f5"));
-        checkpoints.put(112567, new Sha256Hash("000000000000018c0621bf32ab33d3ca871509f406f08be6dd20facea747b099"));
-        checkpoints.put(141845, new Sha256Hash("00000000000000f62d14d55c2bc3ec0ba94e4f2b3868bbe7be9cb5b681fcc0fb"));
-        checkpoints.put(149540, new Sha256Hash("000000000000061b8f5b8653fe13b5e453347d9386d43d09445ee5e26a8222bb"));
-        checkpoints.put(348178, new Sha256Hash("0000000000000a410c6aff939087769e757132098fa0b0ce89f11d68f935077d"));
-        checkpoints.put(431747, new Sha256Hash("000000000000065616abeccd681f7b4d6d7bed06deef0e1a6e70c905edae3692"));
+        //checkpoints.put(     0, new Sha256Hash("00000ffde4c020b5938441a0ea3d314bf619eff0b38f32f78f7583cffa1ea485"));
+        //checkpoints.put(  9646, new Sha256Hash("0000000000000b0f1372211861f226a3ec06a27d0a5bf36e4244a982da077e8f"));
+        //checkpoints.put( 27255, new Sha256Hash("00000000000005112a0debf53703eb3dc4ec2d8d68599c90db71423ea14489b7"));
+        //checkpoints.put( 70623, new Sha256Hash("00000000000004767ff6e509d00772af5c4bedaa82c38c1e95c33adbf5ff84f5"));
+        //checkpoints.put(112567, new Sha256Hash("000000000000018c0621bf32ab33d3ca871509f406f08be6dd20facea747b099"));
+        //checkpoints.put(141845, new Sha256Hash("00000000000000f62d14d55c2bc3ec0ba94e4f2b3868bbe7be9cb5b681fcc0fb"));
+        //checkpoints.put(149540, new Sha256Hash("000000000000061b8f5b8653fe13b5e453347d9386d43d09445ee5e26a8222bb"));
+        //checkpoints.put(348178, new Sha256Hash("0000000000000a410c6aff939087769e757132098fa0b0ce89f11d68f935077d"));
+        //checkpoints.put(431747, new Sha256Hash("000000000000065616abeccd681f7b4d6d7bed06deef0e1a6e70c905edae3692"));
 
     }
 

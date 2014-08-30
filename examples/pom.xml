@@ -20,20 +20,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>com.google</groupId>
-        <artifactId>myriadcoinj-parent</artifactId>
+        <artifactId>digibytej-parent</artifactId>
         <version>0.12-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>myriadcoinj-examples</artifactId>
+    <artifactId>digibytej-examples</artifactId>
 
-    <name>myriadcoinj Examples</name>
-    <description>A collection of examples using the myriadcoinj library</description>
+    <name>digibytej Examples</name>
+    <description>A collection of examples using the digibytej library</description>
 
     <dependencies>
         <dependency>
             <groupId>com.google</groupId>
-            <artifactId>myriadcoinj</artifactId>
+            <artifactId>digibytej</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

@@ -21,14 +21,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.google</groupId>
-        <artifactId>myriadcoinj-parent</artifactId>
+        <artifactId>digibytej-parent</artifactId>
         <version>0.12-SNAPSHOT</version>
     </parent>
 
-    <artifactId>myriadcoinj</artifactId>
+    <artifactId>digibytej</artifactId>
 
-    <name>myriadcoinj</name>
-    <description>A Java myriadcoin library</description>
+    <name>digibytej</name>
+    <description>A Java digibyte library</description>
 
     <packaging>jar</packaging>
 
@@ -226,7 +226,7 @@
             <version>3.0</version>
             <scope>test</scope>
         </dependency>
-        <!-- myriadcoinj consumers are expected to provide their own SLF4J adapters
+        <!-- digibytej consumers are expected to provide their own SLF4J adapters
              such as logback, slf4j-log4j12, slf4j-jcl and so on
              see http://www.slf4j.org/faq.html -->
         <dependency>

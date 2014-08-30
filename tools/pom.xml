@@ -21,16 +21,16 @@
   <parent>
     <groupId>com.google</groupId>
 
-    <artifactId>myriadcoinj-parent</artifactId>
+    <artifactId>digibytej-parent</artifactId>
     <version>0.12-SNAPSHOT</version>
 
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>myriadcoinj-tools</artifactId>
+  <artifactId>digibytej-tools</artifactId>
 
-  <name>myriadcoinj Tools</name>
-  <description>A collection of useful tools that use the myriadcoinj library to perform wallet operations</description>
+  <name>digibytej Tools</name>
+  <description>A collection of useful tools that use the digibytej library to perform wallet operations</description>
 
   <build>
 
@@ -74,7 +74,7 @@
   <dependencies>
     <dependency>
       <groupId>com.google</groupId>
-      <artifactId>myriadcoinj</artifactId>
+      <artifactId>digibytej</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
     <dependency>

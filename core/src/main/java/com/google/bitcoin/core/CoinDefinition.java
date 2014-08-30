@@ -59,6 +59,10 @@ public class CoinDefinition {
 	
 	 //Block retarget adjustments take effect
 	 public static final int nDiffChangeTarget = 67200; // Patch effective @ block 67200
+
+	//Block multiAlgo
+	public static final int nMultiAlgoChangeTarget = 145000; // Patch effective @ block 67200
+
 	 //Duration of blocks between reward deductions
 	 public static final int patchBlockRewardDuration = 10080; // 10080 blocks main net change
 
@@ -209,21 +213,21 @@ public class CoinDefinition {
 
 
     static public String[] testnetDnsSeeds = new String[] {
-            "testseed1.myriadcoin.org"
+            "testseed1.digibyte.org"
     };
        //from main.h: CAlert::CheckSignature
     public static final String SATOSHI_KEY = "040184710fa689ad5023690c80f3a49c8f13f8d45b8c857fbcbc8bc4a8e4d3eb4b10f4d4604fa08dce601aaf0f470216fe1b51850b4acf21b179c45070ac7b03a9";
     public static final String TESTNET_SATOSHI_KEY = "";
 
     /** The string returned by getId() for the main, production network where people trade things. */
-    public static final String ID_MAINNET = "org.myriadcoin.production";
+    public static final String ID_MAINNET = "org.digibyte.production";
     /** The string returned by getId() for the testnet. */
-    public static final String ID_TESTNET = "org.myriadcoin.test";
+    public static final String ID_TESTNET = "org.digibyte.test";
     /** Unit test network. */
     public static final String ID_UNITTESTNET = "com.google.bitcoin.unittest";
 
     //checkpoints.cpp Checkpoints::mapCheckpoints
-    public static final String ID_UNITTESTNET = "com.google.myriadcoin.unittest";
+    public static final String ID_UNITTESTNET = "com.google.digibyte.unittest";
     {
 
         //checkpoints.put(     0, new Sha256Hash("00000ffde4c020b5938441a0ea3d314bf619eff0b38f32f78f7583cffa1ea485"));
