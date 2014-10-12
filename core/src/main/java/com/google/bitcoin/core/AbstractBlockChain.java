@@ -393,7 +393,11 @@ public abstract class AbstractBlockChain {
                 return false;
             } else {
                 // It connects to somewhere on the chain. Not necessarily the top of the best known chain.
-                checkDifficultyTransitions(storedPrev, block);
+				if((storedPrev.getHeight() + 1) > CoinDefinition.nMultiAlgoChangeTarget) {
+					checkDifficultyTransitionsMultiAlgo(storedPrev, block);
+				} else {
+					checkDifficultyTransitions(storedPrev, block);
+				}
                 connectBlock(block, storedPrev, shouldVerifyTransactions(), filteredTxHashList, filteredTxn);
             }
 
@@ -811,10 +815,115 @@ public abstract class AbstractBlockChain {
         }
 
     }
+
+
+
+
+    private void checkDifficultyTransitions(StoredBlock storedPrev, Block nextBlock) throws BlockStoreException, VerificationException {
+        checkState(lock.isHeldByCurrentThread());
+        Block prev = storedPrev.getHeader();
+
+        int algo = nextBlock.getAlgo();
+
+        BigInteger proofOfWorkLimit = CoinDefinition.getProofOfWorkLimit(algo);
+
+        if(params.getId().equals(NetworkParameters.ID_TESTNET))
+        {
+            if(nextBlock.getTimeSeconds() > prev.getTimeSeconds() + params.TARGET_SPACING*2)
+            {
+                verifyDifficulty(proofOfWorkLimit,nextBlock);
+                return;
+            }
+            else
+            {
+                StoredBlock block = storedPrev;
+                while(block != null && block.getHeight() % params.getInterval() != 0 && block.getHeader().getDifficultyTargetAsInteger().compareTo(proofOfWorkLimit) != 0)
+                {
+                    block = blockStore.get(block.getHeader().getPrevBlockHash());
+                }
+                verifyDifficulty(block.getHeader().getDifficultyTargetAsInteger(), nextBlock);
+            }
+
+        }
+
+        int nHeight = (storedPrev.getHeight() + 1);
+        //log.error("block height: {}", nHeight);
+        boolean fNewDifficultyProtocol = (nHeight >= CoinDefinition.nDiffChangeTarget);
+
+        int retargetTimespan = CoinDefinition.TARGET_TIMESPAN;
+        int retargetInterval = CoinDefinition.INTERVAL;
+
+        if(fNewDifficultyProtocol) {
+            retargetTimespan = CoinDefinition.TARGET_TIMESPAN_2;
+            retargetInterval = CoinDefinition.INTERVAL_2;
+            log.error("inside the new diff adjustment {} {}", retargetTimespan,retargetInterval);
+        }
+
+        // We need to find a block far back in the chain. It's OK that this is expensive because it only occurs every
+        // two weeks after the initial block chain download.
+        long now = System.currentTimeMillis();
+        StoredBlock cursor = blockStore.get(prev.getHash());
+
+        int goBack = retargetInterval - 1;
+        if (cursor.getHeight()+1 != retargetInterval)
+            goBack = retargetInterval;
+
+        for (int i = 0; i < goBack; i++) {
+            if (cursor == null) {
+                // This should never happen. If it does, it means we are following an incorrect or busted chain.
+                throw new VerificationException(
+                        "Difficulty transition point but we did not find a way back to the genesis block.");
+            }
+            cursor = blockStore.get(cursor.getHeader().getPrevBlockHash());
+        }
+        long elapsed = System.currentTimeMillis() - now;
+        if (elapsed > 50)
+            log.info("Difficulty transition traversal took {}msec", elapsed);
+
+        // Check if our cursor is null.  If it is, we've used checkpoints to restore.
+        if(cursor == null) return;
+
+        Block blockIntervalAgo = cursor.getHeader();
+        int nActualTimespan = (int) (prev.getTimeSeconds() - blockIntervalAgo.getTimeSeconds());
+        // Limit the adjustment step.
+
+        if(fNewDifficultyProtocol) {
+            //log.error("inside the new diff adjustment 2");
+            if (nActualTimespan < (retargetTimespan - (retargetTimespan/4)) ) nActualTimespan = (retargetTimespan - (retargetTimespan/4));
+            if (nActualTimespan > (retargetTimespan + (retargetTimespan/2)) ) nActualTimespan = (retargetTimespan + (retargetTimespan/2));
+        }
+        else {
+            if (nActualTimespan < retargetTimespan/4) nActualTimespan = retargetTimespan/4;
+            if (nActualTimespan > retargetTimespan*4) nActualTimespan = retargetTimespan*4;
+        }
+
+        BigInteger calcDiff = Utils.decodeCompactBits(prev.getDifficultyTarget());
+        calcDiff = calcDiff.multiply(BigInteger.valueOf(nActualTimespan));
+        calcDiff = calcDiff.divide(BigInteger.valueOf(retargetTimespan));
+
+        if (calcDiff.compareTo(params.getProofOfWorkLimit()) > 0) {
+            log.info("Difficulty hit proof of work limit: {}", calcDiff.toString(16));
+            calcDiff = params.getProofOfWorkLimit();
+        }
+        int accuracyBytes = (int) (nextBlock.getDifficultyTarget() >>> 24) - 3;
+        BigInteger receivedDifficulty = nextBlock.getDifficultyTargetAsInteger();
+
+        // The calculated difficulty is to a higher precision than received, so reduce here.
+        BigInteger mask = BigInteger.valueOf(0xFFFFFFL).shiftLeft(accuracyBytes * 8);
+        calcDiff = calcDiff.and(mask);
+
+        if (calcDiff.compareTo(receivedDifficulty) != 0)
+            throw new VerificationException("Network provided difficulty bits do not match what was calculated: " +
+                    receivedDifficulty.toString(16) + " vs " + calcDiff.toString(16));
+
+    }
+
+
+
     /**
      * Throws an exception if the blocks difficulty is not correct.
      */
-    private void checkDifficultyTransitions(StoredBlock storedPrev, Block nextBlock) throws BlockStoreException, VerificationException {
+    private void checkDifficultyTransitionsMultiAlgo(StoredBlock storedPrev, Block nextBlock) throws BlockStoreException, VerificationException {
         checkState(lock.isHeldByCurrentThread());
         Block prev = storedPrev.getHeader();
 

@@ -56,6 +56,10 @@ public class CoinDefinition {
 	  public static final int TARGET_TIMESPAN_2 = (int)(1 * 60);  // 72 minutes per difficulty cycle, on average.
     public static final int TARGET_SPACING_2 = (int)(1 * 60);  // 40 seconds per block.
     public static final int INTERVAL_2 = TARGET_TIMESPAN_2 / TARGET_SPACING_2;  //108 blocks
+
+    public static final int TARGET_TIMESPAN_MULTIALGO = (int)(150);  // 2.5 hours per difficulty cycle, on average.
+    public static final int TARGET_SPACING_MULTIALGO = (int)(150);  // 2.5 minutes seconds per block.
+    public static final int INTERVAL_MULTIALGO = TARGET_TIMESPAN_MULTIALGO / TARGET_SPACING_MULTIALGO;  //1 blocks
 	
 	 //Block retarget adjustments take effect
 	 public static final int nDiffChangeTarget = 67200; // Patch effective @ block 67200
@@ -67,7 +71,7 @@ public class CoinDefinition {
 	 public static final int patchBlockRewardDuration = 10080; // 10080 blocks main net change
 
     static final long nAveragingInterval = 10; // 10 blocks
-    static final long nAveragingTargetTimespan = nAveragingInterval * TARGET_SPACING; // 25 minutes
+    static final long nAveragingTargetTimespan = nAveragingInterval * TARGET_SPACING_MULTIALGO; // 25 minutes
 
     static final long nMaxAdjustDown = 4; // 4% adjustment down
     static final long nMaxAdjustUp = 2; // 2% adjustment up
@@ -79,11 +83,17 @@ public class CoinDefinition {
             return INTERVAL;      //108
     }
     public static final int getIntervalCheckpoints() {
-            return 2000;
+            return 1;
 
     }
     public static final int getTargetTimespan(int height, boolean testNet) {
-            return TARGET_TIMESPAN;    //72 min
+            if(height > nMultiAlgoChangeTarget) {
+                return TARGET_TIMESPAN_MULTIALGO;
+            } else if(height > nDiffChangeTarget) {
+                return TARGET_TIMESPAN_2;
+            } else {
+                return TARGET_TIMESPAN;    //72 min
+            }
     }
     public static BigInteger getProofOfWorkLimit(int algo)
     {
@@ -91,7 +101,7 @@ public class CoinDefinition {
     }
 
 		//need to look into
-    public static int spendableCoinbaseDepth = 100; //main.h: static const int COINBASE_MATURITY
+    public static int spendableCoinbaseDepth = 8; //main.h: static const int COINBASE_MATURITY
     public static final BigInteger MAX_MONEY = BigInteger.valueOf(2000000000).multiply(Utils.COIN);                 //main.h:  MAX_MONEY
     public static final String MAX_MONEY_STRING = "21000000000";     //main.h:  MAX_MONEY
 
@@ -127,13 +137,13 @@ public class CoinDefinition {
     static public String genesisHash = "7497ea1b465eb39f1c8f507bc877078fe016d6fcb6dfad3a64c98dcc6e1e8496"; 	 //main.cpp: hashGenesisBlock
     static public String genesisMerkleRoot = "72ddd9496b004221ed0557358846d9248ecd4c440ebd28ed901efc18757d0fad";  
 		static public int genesisBlockValue = 8000;                                                              //main.cpp: LoadBlockIndex
-    static public String genesisXInBytes = "04ffff001d01044555534120546f6461793a2031302f4a616e2f323031342c205461726765743a20446174612073746f6c656e2066726f6d20757020746f203131304d20637573746f6d657273";   
-    static public String genessiXOutBytes = "00";
+    static public String genesisTXInBytes = "04ffff001d01044555534120546f6461793a2031302f4a616e2f323031342c205461726765743a20446174612073746f6c656e2066726f6d20757020746f203131304d20637573746f6d657273";
+    static public String genesisTXOutBytes = "00";
     
 
     //net.cpp strDNSSeed
     static public String[] dnsSeeds = new String[] {
-					"seed1.digibyte.co", "seed2.hashdragon.com",",
+					"seed1.digibyte.co", "seed2.hashdragon.com"
     };
 
     public static int minBroadcastConnections = 1;   //0 for default; we need more peers.
@@ -223,8 +233,6 @@ public class CoinDefinition {
     public static final String ID_MAINNET = "org.digibyte.production";
     /** The string returned by getId() for the testnet. */
     public static final String ID_TESTNET = "org.digibyte.test";
-    /** Unit test network. */
-    public static final String ID_UNITTESTNET = "com.google.bitcoin.unittest";
 
     //checkpoints.cpp Checkpoints::mapCheckpoints
     public static final String ID_UNITTESTNET = "com.google.digibyte.unittest";
